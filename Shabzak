@@ -1,199 +1,570 @@
 <!DOCTYPE html>
 <html lang="he">
+<!-- Set the language of the document to Hebrew -->
+
 <head>
+  <!-- Start of the head section -->
   <meta charset="UTF-8">
+  <!-- Specifies the character encoding for the document -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Configures viewport for responsiveness -->
   <title>לוח שנה שבועי נוכחות - כניסה</title>
+  <!-- Sets the title of the page, translated to Hebrew, with login indication -->
   <style>
+    /* Styles for the login/signup form and calendar */
     body {
       font-family: Arial, sans-serif;
+      /* Sets a generic sans-serif font, with Arial as a specific option */
       margin: 0;
+      /* Remove default body margin */
       padding: 0;
+      /* Remove default body padding */
       background-color: #f4f4f4;
+      /* Sets a light gray background color*/
       direction: rtl;
+      /* Sets the default text direction to right-to-left for Hebrew */
       display: flex;
+      /* Use flexbox for centering */
       justify-content: center;
+      /* Center content horizontally */
       align-items: center;
+      /* Center content vertically */
       min-height: 100vh;
+      /* Ensure minimum height is the full viewport height */
     }
-    .login-container, .register-container {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      max-width: 300px;
-      width: 100%;
-    }
-    .login-container h1, .register-container h1 {
-      margin-bottom: 20px;
-    }
-    .input {
-      width: calc(100% - 20px);
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .button {
-      width: 100%;
-      padding: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .button:hover {
-      background-color: #45a049;
-    }
-    .error-message {
-      color: red;
-      margin-top: 10px;
-    }
+
     .container {
       max-width: 800px;
+      /* Sets a maximum width for the content */
       margin: 20px auto;
+      /* Centers the container horizontally with top/bottom margin */
       padding: 20px;
+      /* Adds padding inside the container */
       background-color: #fff;
+      /* Sets a white background color */
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      /* Adds a subtle box shadow */
       border-radius: 8px;
-      display: none;
+      /* Rounds the corners of the container */
     }
+
+    .login-container {
+      max-width: 400px;
+      /* Limit the width of the login container */
+      padding: 20px;
+      /* Add padding inside the container */
+      background-color: #fff;
+      /* White background */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      /* Subtle box shadow */
+      border-radius: 8px;
+      /* Rounded corners */
+      text-align: center;
+      /* Center text content */
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      /* Spacing between form elements */
+      text-align: right;
+      /* Align text to the right for Hebrew */
+    }
+
+    .form-group label {
+      display: block;
+      /* Labels on their own line */
+      margin-bottom: 5px;
+      /* Space below labels */
+      font-weight: bold;
+      /* Bold labels */
+    }
+
+    .form-group input {
+      width: 100%;
+      /* Input fields take full width */
+      padding: 8px;
+      /* Padding inside input fields */
+      box-sizing: border-box;
+      /* Include padding in width calculation */
+      border: 1px solid #ccc;
+      /* Light gray border */
+      border-radius: 4px;
+      /* Slightly rounded corners */
+    }
+
+    .form-group button {
+      width: 100%;
+      /* Button takes full width */
+      padding: 10px;
+      /* Padding inside button */
+      background-color: #4CAF50;
+      /* Green background */
+      color: white;
+      /* White text */
+      border: none;
+      /* No border */
+      border-radius: 4px;
+      /* Rounded corners */
+      cursor: pointer;
+      /* Pointer cursor on hover */
+    }
+
+    .form-group button:hover {
+      background-color: #45a049;
+      /* Darker green on hover */
+    }
+
+    .form-group .switch-form {
+      margin-top: 10px;
+      /* Space above switch link */
+      font-size: 0.9em;
+      /* Slightly smaller font */
+      color: blue;
+      /* Blue link color */
+      cursor: pointer;
+      /* Pointer cursor */
+      text-decoration: underline;
+      /* Underline the link */
+    }
+
     .calendar {
-      display: grid;
+      display: none;
+      /* Initially hide the calendar */
       grid-template-columns: repeat(7, 1fr);
+      /* Creates 7 equal-width columns for days */
       gap: 10px;
+      /* Sets the gap between grid items */
     }
+
     .day {
       border: 1px solid #ddd;
+      /* Adds a light gray border to each day */
       padding: 10px;
+      /* Adds padding inside each day */
       text-align: center;
+      /* Centers the text within each day */
       background-color: #f9f9f9;
+      /* Light gray background for days */
     }
+
     .day-header {
       font-weight: bold;
+      /* Make day header text bold */
       margin-bottom: 5px;
+      /* Add space below header */
       background-color: #eee;
+      /* Slightly darker background for headers */
       padding: 5px;
+      /* Padding for the day headers */
+    }
+
+    .name-list {
+      margin-top: 10px;
+      /* Adds space above the name list */
+      text-align: right;
+      /* Align names to the right for Hebrew */
+    }
+
+    .name {
+      padding: 2px 5px;
+      /* Adds padding around each name */
+      margin: 2px 0;
+      /* Margin between names */
+      display: inline-block;
+      /* Displays names inline-block */
+      border-radius: 3px;
+      /* Slightly rounded corners for name tags */
+      cursor: pointer;
+      /* Change cursor to pointer on hover */
+    }
+
+    .on-base {
+      background-color: green;
+      /* Green background for "on base" */
+    }
+
+    .request {
+      background-color: yellow;
+      /* Yellow background for "request" */
+    }
+
+    .sick {
+      background-color: red;
+      /* Red background for "sick" */
+      color: white;
+      /* White text for better contrast on Red */
+    }
+
+    .totals {
+      margin-top: 10px;
+      /* Adds space above the totals */
+      font-weight: bold;
+      /* Bold text for totals */
+    }
+
+    /* Style for the name management section */
+    .name-management {
+      margin-bottom: 20px;
+      /* Adds bottom margin */
+      border: 1px solid #ddd;
+      /* Adds border */
+      padding: 10px;
+      /* Adds padding */
+      background-color: #f9f9f9;
+      /* Light gray background */
+    }
+
+    /* Style for individual name inputs */
+    .name-input {
+      margin-right: 5px;
+      /* Adds right margin */
+      padding: 5px;
+      /* Adds padding */
+      border: 1px solid #ccc;
+      /* Adds border */
+      border-radius: 4px;
+      /* Rounded corners */
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .calendar {
+        grid-template-columns: repeat(1, 1fr);
+        /* Stack days vertically on small screens */
+      }
+
+      .login-container {
+        width: 90%;
+        /* Wider login container on small screens */
+      }
     }
   </style>
+  <!-- End of the style section -->
 </head>
+
 <body>
-
-  <!-- Login Container -->
+  <!-- Start of the body section -->
+  <!-- Login/Signup Container -->
   <div class="login-container" id="loginContainer">
-    <h1>כניסה</h1>
-    <input type="text" id="loginUsername" class="input" placeholder="שם משתמש">
-    <input type="password" id="loginPassword" class="input" placeholder="סיסמה">
-    <button onclick="login()" class="button">כניסה</button>
-    <p id="loginError" class="error-message"></p>
-    <p>אין לך חשבון? <a href="#" onclick="showRegister()">הירשם כאן</a></p>
+    <!-- Container for login/signup forms -->
+    <h2>כניסה / הרשמה</h2>
+    <!-- Heading, translated to Hebrew -->
+
+    <!-- Login Form -->
+    <div class="form-group" id="loginForm">
+      <!-- Container for login form -->
+      <label for="loginUsername">שם משתמש:</label>
+      <!-- Label for username, translated to Hebrew -->
+      <input type="text" id="loginUsername" placeholder="הכנס שם משתמש">
+      <!-- Username input field, with Hebrew placeholder -->
+      <label for="loginPassword">סיסמה:</label>
+      <!-- Label for password, translated to Hebrew -->
+      <input type="password" id="loginPassword" placeholder="הכנס סיסמה">
+      <!-- Password input field, with Hebrew placeholder -->
+      <button onclick="login()">כניסה</button>
+      <!-- Login button, translated to Hebrew -->
+      <div class="switch-form" onclick="showSignup()">עבור להרשמה</div>
+      <!-- Link to switch to signup form, translated to Hebrew -->
+    </div>
+
+    <!-- Signup Form -->
+    <div class="form-group" id="signupForm" style="display: none;">
+      <!-- Container for signup form, initially hidden -->
+      <label for="signupUsername">שם משתמש:</label>
+      <!-- Label for username, translated to Hebrew -->
+      <input type="text" id="signupUsername" placeholder="הכנס שם משתמש">
+      <!-- Username input field, with Hebrew placeholder -->
+      <label for="signupPassword">סיסמה:</label>
+      <!-- Label for password, translated to Hebrew -->
+      <input type="password" id="signupPassword" placeholder="הכנס סיסמה">
+      <!-- Password input field, with Hebrew placeholder -->
+      <label for="confirmPassword">אימות סיסמה:</label>
+      <!-- Label for password confirmation, translated to Hebrew -->
+      <input type="password" id="confirmPassword" placeholder="אמת סיסמה">
+      <!-- Password confirmation input field, with Hebrew placeholder -->
+      <button onclick="signup()">הרשמה</button>
+      <!-- Signup button, translated to Hebrew -->
+      <div class="switch-form" onclick="showLogin()">עבור לכניסה</div>
+      <!-- Link to switch to login form, translated to Hebrew -->
+    </div>
   </div>
 
-  <!-- Register Container -->
-  <div class="register-container" id="registerContainer" style="display: none;">
-    <h1>הרשמה</h1>
-    <input type="text" id="registerUsername" class="input" placeholder="שם משתמש">
-    <input type="password" id="registerPassword" class="input" placeholder="סיסמה">
-    <button onclick="register()" class="button">הרשמה</button>
-    <p id="registerError" class="error-message"></p>
-    <p>כבר יש לך חשבון? <a href="#" onclick="showLogin()">התחבר כאן</a></p>
-  </div>
-
-  <!-- Main Content -->
-  <div class="container" id="calendarContainer">
+  <!-- Main container for the content (initially hidden) -->
+  <div class="container" id="calendarContainer" style="display: none;">
+    <!-- Main container for the content -->
     <h1>לוח שנה שבועי נוכחות</h1>
-    <div class="calendar" id="calendar"></div>
+    <!-- Main heading, translated to Hebrew -->
+
+    <!-- Name Management Section -->
+    <div class="name-management">
+      <!-- Container for name management -->
+      <label for="namesInput">ניהול שמות (מופרדים בפסיק):</label>
+      <!-- Label for names input, translated to Hebrew -->
+      <input type="text" id="namesInput" placeholder="דוד, רות, משה">
+      <!-- Text input for names, with Hebrew placeholder -->
+      <button onclick="updateNames()">עדכן שמות</button>
+      <!-- Button to update the names, translated to Hebrew -->
+    </div>
+
+    <div class="calendar" id="calendar">
+      <!-- Calendar container -->
+      <!-- Calendar days will be dynamically added here -->
+    </div>
+      <button onclick="logout()">התנתק</button>
   </div>
 
   <script>
-    // Show registration form
-    function showRegister() {
-      document.getElementById('loginContainer').style.display = 'none';
-      document.getElementById('registerContainer').style.display = 'block';
+    // Start of the script section
+
+    let currentDate = new Date(); // Get the current date
+    let loggedInUser = null; // Track the currently logged-in user
+
+    // Function to show the signup form
+    function showSignup() {
+      document.getElementById('loginForm').style.display = 'none'; // Hide login form
+      document.getElementById('signupForm').style.display = 'block'; // Show signup form
     }
 
-    // Show login form
+    // Function to show the login form
     function showLogin() {
-      document.getElementById('registerContainer').style.display = 'none';
-      document.getElementById('loginContainer').style.display = 'block';
+      document.getElementById('signupForm').style.display = 'none'; // Hide signup form
+      document.getElementById('loginForm').style.display = 'block'; // Show login form
     }
 
-    // Register new user
-    function register() {
-      const username = document.getElementById('registerUsername').value.trim();
-      const password = document.getElementById('registerPassword').value.trim();
-      const registerError = document.getElementById('registerError');
+    // Function to handle user signup
+    function signup() {
+      const username = document.getElementById('signupUsername').value; // Get username from input
+      const password = document.getElementById('signupPassword').value; // Get password from input
+      const confirmPassword = document.getElementById('confirmPassword').value; // Get confirmed password
 
-      if (!username || !password) {
-        registerError.textContent = "שם משתמש וסיסמה נדרשים";
-        return;
+      if (!username || !password || !confirmPassword) { // Check all field are filled
+        alert('אנא מלא את כל השדות'); // Alert if not all filled
+        return; // Stop
+      }
+      if (password !== confirmPassword) { // Check if passwords match
+        alert('הסיסמאות אינן תואמות'); // Alert if passwords don't match
+        return; // Stop
       }
 
-      let users = JSON.parse(localStorage.getItem('users')) || [];
+      // Check if user already exists
+        if (localStorage.getItem(username)) {
+          alert('שם משתמש זה כבר קיים. אנא בחר שם משתמש אחר.');
+          return;
+        }
 
-      if (users.some(user => user.username === username)) {
-        registerError.textContent = "שם המשתמש כבר קיים";
-        return;
-      }
+      // Store the username and password.
+      localStorage.setItem(username, password);  // Store the username and password.
+      // Initialize user data storage
+      localStorage.setItem(`${username}_data`, JSON.stringify({ names: ["אליס", "בוב", "צ'רלי"], calendarData: {} }));
 
-      users.push({ username, password });
-      localStorage.setItem('users', JSON.stringify(users));
-      alert("הרשמה בוצעה בהצלחה!");
-      showLogin();
+      alert('הרשמה הצליחה! כעת ניתן להתחבר.'); // Notify successful signup, translated to Hebrew
+      showLogin(); // Switch back to the login form
     }
 
-    // Login user
+    // Function to handle user login
     function login() {
-      const username = document.getElementById('loginUsername').value.trim();
-      const password = document.getElementById('loginPassword').value.trim();
-      const loginError = document.getElementById('loginError');
+      const username = document.getElementById('loginUsername').value; // Get username from input
+      const password = document.getElementById('loginPassword').value; // Get password from input
 
-      let users = JSON.parse(localStorage.getItem('users')) || [];
+      if (!username || !password) { // Check all field are filled
+        alert('אנא מלא את כל השדות'); // Alert if not all filled
+        return; // Stop
+      }
 
-      const user = users.find(user => user.username === username && user.password === password);
-
-      if (user) {
-        localStorage.setItem('loggedInUser', username);
-        document.getElementById('loginContainer').style.display = 'none';
-        document.getElementById('calendarContainer').style.display = 'block';
-        initCalendar();
+      // For this example, we'll simulate a successful login
+      const storedPassword = localStorage.getItem(username); // Get the stored password.
+      if (storedPassword && storedPassword === password) { // Check if user exists and password match
+        loggedInUser = username; // Set the logged-in user
+        document.getElementById('loginContainer').style.display = 'none'; // Hide login container
+        document.getElementById('calendarContainer').style.display = 'block'; // Show calendar container
+        loadUserData(); // Load user data
+        renderCalendar(); // Render the calendar after successful login
       } else {
-        loginError.textContent = "שם משתמש או סיסמה שגויים";
+        alert('שם משתמש או סיסמה שגויים'); // Alert for incorrect credentials, translated to Hebrew
       }
     }
 
-    // Automatically log in if user is already stored
-    window.onload = function () {
-      const loggedInUser = localStorage.getItem('loggedInUser');
-      if (loggedInUser) {
-        document.getElementById('loginContainer').style.display = 'none';
-        document.getElementById('calendarContainer').style.display = 'block';
-        initCalendar();
+      // Function to handle user logout
+    function logout() {
+      saveUserData();      // Save user data before logging out
+      loggedInUser = null; // Clear the logged-in user
+      document.getElementById('calendarContainer').style.display = 'none'; // Hide calendar container
+      document.getElementById('loginContainer').style.display = 'block'; // Show login container
+      document.getElementById('loginUsername').value = ''; // Clear username
+      document.getElementById('loginPassword').value = '';  // Clear password.
+    }
+
+    // Function to get an array of 7 days starting from the current date
+    function getWeekDates(startDate) {
+      const weekDates = []; // Initialize an empty array to store the dates
+      for (let i = 0; i < 7; i++) { // Loop 7 times to get 7 days
+        const date = new Date(startDate); // Create a new Date object from the startDate
+        date.setDate(startDate.getDate() + i); // Increment the date by i days
+        weekDates.push(date); // Add the date to the array
       }
-    };
+      return weekDates; // Return the array of dates
+    }
 
-    // Calendar initialization
-    function initCalendar() {
-      const calendar = document.getElementById('calendar');
-      calendar.innerHTML = ''; 
+    // Function to format date as "Day, DD/MM"
+    function formatDate(date) {
+      const daysOfWeek = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת']; // Array of days in Hebrew
+      const dayOfWeek = daysOfWeek[date.getDay()]; // Get the day of the week in Hebrew
+      const dayOfMonth = date.getDate(); // Get the day of the month
+      const month = date.getMonth() + 1; // Get the month (getMonth() is 0-indexed)
+      return `${dayOfWeek}, ${dayOfMonth}/${month}`; // Return the formatted date string
+    }
 
-      const daysOfWeek = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-      const today = new Date();
+    // Function to update the global names array
+    function updateNames() {
+        if (!loggedInUser) return; // Only allow when logged in
 
-      for (let i = 0; i < 7; i++) {
-        const date = new Date();
-        date.setDate(today.getDate() + i);
+        const namesInput = document.getElementById('namesInput'); // Get the names input element
+        const newNames = namesInput.value.split(',').map(name => name.trim()).filter(name => name !== ""); // Split string into array, trim whitespace, and remove empty strings
 
-        const dayElement = document.createElement('div');
-        dayElement.classList.add('day');
-        dayElement.innerHTML = `<div class="day-header">${daysOfWeek[date.getDay()]}, ${date.getDate()}/${date.getMonth() + 1}</div>`;
+        if (newNames.length > 0) { // Check if there are any names after processing
+          const userData = getUserData(); // Get user data
+          userData.names = newNames; // Update names
+          saveUserData(userData); // Save user data
+          renderCalendar(); // Re-render the calendar with updated names
+        }
+        namesInput.value = getUserData().names.join(', '); // Update input with current names
+    }
 
-        calendar.appendChild(dayElement);
+    // Function to render the calendar
+    function renderCalendar() {
+      if (!loggedInUser) return; // Do not render if not logged in
+
+      const calendar = document.getElementById('calendar'); // Get the calendar container element
+      calendar.innerHTML = ''; // Clear the calendar
+      const weekDates = getWeekDates(currentDate); // Get the array of 7 dates for the current week
+
+      const userData = getUserData(); // Get user data
+
+      for (const date of weekDates) { // Loop through each date in the weekDates array
+        const dateStr = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+        const dayElement = document.createElement('div'); // Create a new div for the day
+        dayElement.classList.add('day'); // Add the 'day' class to the div
+        dayElement.innerHTML = `<div class="day-header">${formatDate(date)}</div>`; // Add the formatted date as the header
+
+        const nameList = document.createElement('div'); // Create a div for the name list
+        nameList.classList.add('name-list'); // Add the 'name-list' class
+
+        let onBaseCount = 0; // Initialize on-base count
+        let requestCount = 0; // Initialize request count
+        let sickCount = 0; // Initialize sick count
+
+        // Initialize dayData if it doesn't exist
+        if (!userData.calendarData[dateStr]) {
+            userData.calendarData[dateStr] = {};
+            for (const name of userData.names) {
+                userData.calendarData[dateStr][name] = 'on-base'; // Default status
+            }
+        }
+
+        for (const name of userData.names) { // Iterate through the global names array
+          const nameElement = document.createElement('span'); // Create a span for each name
+          nameElement.classList.add('name'); // Add the 'name' class
+          nameElement.textContent = name; // Set the name as text content
+
+          // Set the initial class based on stored data
+          const status = userData.calendarData[dateStr][name] || 'on-base'; // Get status, default to on-base
+          nameElement.classList.add(status); // Add class for current status
+
+          // Update the counts
+            switch (status) {
+              case 'on-base': onBaseCount++; break;
+              case 'request': requestCount++; break;
+              case 'sick': sickCount++; break;
+            }
+
+          nameElement.addEventListener('click', function() { // Add click event listener to toggle status
+            let newStatus; // Variable to store the new status
+            if (nameElement.classList.contains('on-base')) { // Check if current status is on-base
+              nameElement.classList.remove('on-base'); // Remove on-base class
+              nameElement.classList.add('request'); // Add request class
+              newStatus = 'request'; // Set new status
+              onBaseCount--; // Decrement on-base count
+              requestCount++; // Increment request count
+            } else if (nameElement.classList.contains('request')) { // Check if current status is request
+              nameElement.classList.remove('request'); // Remove request class
+              nameElement.classList.add('sick'); // Add sick class
+              newStatus = 'sick'; // Set new status
+              requestCount--; // Decrement request count
+              sickCount++; // Increment sick count
+            } else { // If not on-base or request, must be sick
+              nameElement.classList.remove('sick'); // Remove sick class
+              nameElement.classList.add('on-base'); // Add on-base class
+              newStatus = 'on-base';
+              sickCount--; // Decrement sick count
+              onBaseCount++; // Increment on-base count
+            }
+
+            // Update the user data
+            userData.calendarData[dateStr][name] = newStatus;
+            saveUserData(userData);
+
+            updateTotals(dayElement, onBaseCount, requestCount, sickCount); // Update the totals for the day
+          });
+
+          nameList.appendChild(nameElement); // Append the name element to the name list
+        }
+
+        dayElement.appendChild(nameList); // Append the name list to the day element
+
+        const totalsElement = document.createElement('div'); // Create a div for totals
+        totalsElement.classList.add('totals'); // Add the 'totals' class
+        totalsElement.textContent = `בבסיס: ${onBaseCount}, בקשה: ${requestCount}, חולה: ${sickCount}`; // Set initial totals text, translated to Hebrew
+
+        dayElement.appendChild(totalsElement); // Append totals to the day element
+
+        calendar.appendChild(dayElement); // Append the day element to the calendar
       }
     }
+
+    // Function to update totals for a specific day
+    function updateTotals(dayElement, onBaseCount, requestCount, sickCount) {
+      const totalsElement = dayElement.querySelector('.totals'); // Find the totals element within the day
+      totalsElement.textContent = `בבסיס: ${onBaseCount}, בקשה: ${requestCount}, חולה: ${sickCount}`; // Update the totals text, translated to Hebrew
+    }
+
+    // Function to advance to the next day
+    function nextDay() {
+      currentDate.setDate(currentDate.getDate() + 1); // Increment the current date by one day
+      renderCalendar(); // Re-render the calendar with the new date
+    }
+
+    // Load user data from localStorage
+    function loadUserData() {
+        if (loggedInUser) {
+          const userData = getUserData();
+          document.getElementById('namesInput').value = userData.names.join(', '); // Set names input
+        }
+    }
+
+    // Save user data to localStorage
+    function saveUserData() {
+        if (loggedInUser) {
+          const userData = getUserData();
+          localStorage.setItem(`${loggedInUser}_data`, JSON.stringify(userData));
+        }
+    }
+
+    // Get user data
+    function getUserData() {
+        const storedData = localStorage.getItem(`${loggedInUser}_data`);
+        return storedData ? JSON.parse(storedData) : { names: [], calendarData: {} };
+    }
+
+    // Initialize
+    function init() {
+      // Set interval to advance to the next day every 24 hours (86400000 milliseconds)
+      setInterval(nextDay, 86400000);
+    }
+
+    init(); // Call the initialization function when the page loads
   </script>
-
+  <!-- End of the script section -->
 </body>
+<!-- End of the body section -->
+
 </html>
