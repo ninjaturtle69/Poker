@@ -1,1 +1,199 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>לוח שנה שבועי נוכחות - כניסה</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      direction: rtl;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .login-container, .register-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 300px;
+      width: 100%;
+    }
+    .login-container h1, .register-container h1 {
+      margin-bottom: 20px;
+    }
+    .input {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #45a049;
+    }
+    .error-message {
+      color: red;
+      margin-top: 10px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      display: none;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+    .day {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    .day-header {
+      font-weight: bold;
+      margin-bottom: 5px;
+      background-color: #eee;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
 
+  <!-- Login Container -->
+  <div class="login-container" id="loginContainer">
+    <h1>כניסה</h1>
+    <input type="text" id="loginUsername" class="input" placeholder="שם משתמש">
+    <input type="password" id="loginPassword" class="input" placeholder="סיסמה">
+    <button onclick="login()" class="button">כניסה</button>
+    <p id="loginError" class="error-message"></p>
+    <p>אין לך חשבון? <a href="#" onclick="showRegister()">הירשם כאן</a></p>
+  </div>
+
+  <!-- Register Container -->
+  <div class="register-container" id="registerContainer" style="display: none;">
+    <h1>הרשמה</h1>
+    <input type="text" id="registerUsername" class="input" placeholder="שם משתמש">
+    <input type="password" id="registerPassword" class="input" placeholder="סיסמה">
+    <button onclick="register()" class="button">הרשמה</button>
+    <p id="registerError" class="error-message"></p>
+    <p>כבר יש לך חשבון? <a href="#" onclick="showLogin()">התחבר כאן</a></p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container" id="calendarContainer">
+    <h1>לוח שנה שבועי נוכחות</h1>
+    <div class="calendar" id="calendar"></div>
+  </div>
+
+  <script>
+    // Show registration form
+    function showRegister() {
+      document.getElementById('loginContainer').style.display = 'none';
+      document.getElementById('registerContainer').style.display = 'block';
+    }
+
+    // Show login form
+    function showLogin() {
+      document.getElementById('registerContainer').style.display = 'none';
+      document.getElementById('loginContainer').style.display = 'block';
+    }
+
+    // Register new user
+    function register() {
+      const username = document.getElementById('registerUsername').value.trim();
+      const password = document.getElementById('registerPassword').value.trim();
+      const registerError = document.getElementById('registerError');
+
+      if (!username || !password) {
+        registerError.textContent = "שם משתמש וסיסמה נדרשים";
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem('users')) || [];
+
+      if (users.some(user => user.username === username)) {
+        registerError.textContent = "שם המשתמש כבר קיים";
+        return;
+      }
+
+      users.push({ username, password });
+      localStorage.setItem('users', JSON.stringify(users));
+      alert("הרשמה בוצעה בהצלחה!");
+      showLogin();
+    }
+
+    // Login user
+    function login() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const loginError = document.getElementById('loginError');
+
+      let users = JSON.parse(localStorage.getItem('users')) || [];
+
+      const user = users.find(user => user.username === username && user.password === password);
+
+      if (user) {
+        localStorage.setItem('loggedInUser', username);
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('calendarContainer').style.display = 'block';
+        initCalendar();
+      } else {
+        loginError.textContent = "שם משתמש או סיסמה שגויים";
+      }
+    }
+
+    // Automatically log in if user is already stored
+    window.onload = function () {
+      const loggedInUser = localStorage.getItem('loggedInUser');
+      if (loggedInUser) {
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('calendarContainer').style.display = 'block';
+        initCalendar();
+      }
+    };
+
+    // Calendar initialization
+    function initCalendar() {
+      const calendar = document.getElementById('calendar');
+      calendar.innerHTML = ''; 
+
+      const daysOfWeek = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+      const today = new Date();
+
+      for (let i = 0; i < 7; i++) {
+        const date = new Date();
+        date.setDate(today.getDate() + i);
+
+        const dayElement = document.createElement('div');
+        dayElement.classList.add('day');
+        dayElement.innerHTML = `<div class="day-header">${daysOfWeek[date.getDay()]}, ${date.getDate()}/${date.getMonth() + 1}</div>`;
+
+        calendar.appendChild(dayElement);
+      }
+    }
+  </script>
+
+</body>
+</html>
